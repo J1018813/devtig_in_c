@@ -62,6 +62,16 @@ token_T* lexer_next_token(lexer_T* lexer)
                 return init_token(lexer->c, EOF);
                 break;
         default:
+                if (is_letter(lexer->c)) {
+                        char* literal = read_literal(lexer);
+                        token_type_t type = lookup_id(literal);
+                        return init_token(literal, type);
+                } else if (is_digit(lexer->c)) {
+                        char* number = read_integer(lexer);
+                        token_type_t type = INT;
+                        return init_token(number, type);
+                }
+                
                 break;
         }
 
@@ -69,13 +79,32 @@ token_T* lexer_next_token(lexer_T* lexer)
 
 void lexer_advance(lexer_T* lexer)
 {
-        if (lexer->i >= sizeof(lexer->src)) {
-                lexer->c = 0;
-                return;
-        } 
+        if (lexer->i < sizeof(lexer->src) && lexer->c != '\0') {
+                lexer->i += 1;
+                lexer->c = lexer->src[lexer->i];
+        }         
+}
 
-        lexer->i++;
-        lexer->c = lexer->src[lexer->i];
+void read_char(lexer_T* lexer)
+{
+
+}
+
+char* read_literal(lexer_T* lexer)
+{
+        uint8_t position = lexer->i;
+        while (is_letter(lexer->c))
+        {
+                read_char(lexer);
+        }
+
+        //return lexer->src[position]
+        // TODO: return string taken from source.        
+}
+
+char* read_integer(lexer_T* lexer)
+{
+
 }
 
 uint8_t is_letter(char ch) 
@@ -83,7 +112,7 @@ uint8_t is_letter(char ch)
         return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_';
 }
 
-uint8_t is_letter(char ch) 
+uint8_t is_digit(char ch) 
 {
         return '0' <= ch && ch <= '9';
 }

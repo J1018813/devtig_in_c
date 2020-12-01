@@ -1,10 +1,7 @@
 #ifndef DEVT_TOKEN_H
 #define DEVT_TOKEN_H
 
-typedef struct TOKEN_STRUCT
-{
-        char* literal;
-        enum{
+typedef enum TOKEN_TYPE {
                 ILLEGAL,
                 EOF,
                 // Identifiers + literals
@@ -36,11 +33,21 @@ typedef struct TOKEN_STRUCT
                 IF,
                 ELSE,
                 RETURN,                
-        } type;
+        } token_type_t;
+
+typedef struct TOKEN_STRUCT
+{
+        char* literal;
+        token_type_t type;
+        
+        
 } token_T;
 
 
-token_T* init_token(char* literal, int type);
+token_T* init_token(char* literal, token_type_t type);
+
+token_type_t lookup_id(char* literal)
+
 
 #endif
 
