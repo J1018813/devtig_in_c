@@ -15,6 +15,5 @@ typedef struct LEXER_STRUCT
 
 lexer_T* init_lexer(char* src);
 
-token_T* lexer_nexT_token(lexer_T* lexer);
 
 #endif
